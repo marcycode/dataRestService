@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {Author, Book} from '../model/book';
 import { HttpClient, HttpParams } from "@angular/common/http";
 import {Observable} from "rxjs";
@@ -10,7 +10,7 @@ const Url = 'http://localhost:8080/books-api/';
   providedIn: 'root'
 })
 export class BooksService {
-  constructor(private http: HttpClient) {}
+  private http: HttpClient = inject(HttpClient);
 
   public getBook(id: string): Observable<Book> {
     return this.http.get<Book>(Url + 'books/' + id);

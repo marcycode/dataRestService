@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {Author, Book} from '../books/model/book';
 import {BooksService} from '../books/service/books.service';
@@ -20,6 +20,8 @@ function categoryValidator(control: FormControl<string>): { [s: string]: boolean
     imports: [NgStyle, FormsModule, ReactiveFormsModule, NgFor]
 })
 export class AdminComponent implements OnInit {
+  private builder: FormBuilder = inject(FormBuilder);
+  private booksService: BooksService = inject(BooksService);
   message: string = '';
   hideMsg = true;
   msgStyle = {
@@ -50,10 +52,6 @@ export class AdminComponent implements OnInit {
 
   get authors(): FormArray {
     return this.bookForm.get('authors') as FormArray;
-  }
-
-  constructor(private builder: FormBuilder,
-              private booksService: BooksService) {
   }
 
   ngOnInit(): void {
@@ -119,4 +117,3 @@ export class AdminComponent implements OnInit {
     this.authors.removeAt(i);
   }
 }
-
