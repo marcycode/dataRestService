@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms'; // Import FormsModule for ngModel support
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { AuthorsService } from '../services/authors.service';
 
 @Component({
@@ -7,7 +8,7 @@ import { AuthorsService } from '../services/authors.service';
   standalone: true,
   templateUrl: './authors.component.html',
   styleUrls: ['./authors.component.css'],
-  imports: [FormsModule] // Add FormsModule here
+  imports: [CommonModule, FormsModule]
 })
 export class AuthorsComponent {
   authorId!: string;
@@ -17,8 +18,16 @@ export class AuthorsComponent {
   constructor(private authorsService: AuthorsService) {}
 
   onSubmit() {
-    this.authorsService.getAuthorById(this.authorId).subscribe({
+    const id = Number(this.authorId);
+    if (isNaN(id)) {
+      this.message = 'Please enter a valid number for the author ID';
+      this.author = null;
+      return;
+    }
+
+    this.authorsService.getAuthorById(id).subscribe({
       next: (author) => {
+        console.log('Author data:', author); 
         this.author = author;
         this.message = '';
       },
